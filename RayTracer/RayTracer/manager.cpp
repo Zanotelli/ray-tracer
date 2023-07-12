@@ -144,13 +144,20 @@ std::vector<Texture> readTextureData(FILE* file){
 		fgets(line, sizeof(line), file);
 		std::stringstream input(line);
 
+		Texture texture;
+		texture.textureId = i;
+
+		input >> texture.ka >> texture.kd >> texture.ks >> texture.alfa
+			  >> texture.kr >> texture.kt >> texture.ior;
+		
+		textureVec[i] = texture;
 	}
 
 	return textureVec;
 }
 
 
-std::vector<Body> readBodyData(FILE* file, std::vector<Color> colorVec){
+std::vector<Body> readBodyData(FILE* file, std::vector<Color> colorVec, std::vector<Texture> textureVec){
 
 	char line[100];
 	fgets(line, sizeof(line), file);
@@ -165,6 +172,42 @@ std::vector<Body> readBodyData(FILE* file, std::vector<Color> colorVec){
 		fgets(line, sizeof(line), file);
 		std::stringstream input(line);
 
+		int colorId, textureId;
+		input >> colorId >> textureId;
+
+		Body body;
+		body.color = colorVec[colorId];
+		body.texture = textureVec[textureId];
+
+		std::string objType;
+		input >> objType;
+
+		if(objType == SPHERE){
+
+			Sphere sphere;
+			input >> sphere.pos[0] >> sphere.pos[1] 
+				  >> sphere.pos[2] >> sphere.radius;
+			body.sphere = sphere;
+
+		} else if (objType == POLYHEDRON) {
+
+			Polyhedron polyhedron;
+			int n = 0;
+			input >> n;
+			if(n > 20) throw std::runtime_error("ERROR: Número de vértices inválido.\n");
+			
+			polyhedron.n = n;
+			for(int i = 0; i < n; i++){
+				input >> polyhedron.side[i][0] >> polyhedron.side[i][1] 
+					  >> polyhedron.side[i][2] >> polyhedron.side[i][3];
+			}
+			body.polyhedron = polyhedron;
+
+		} else{
+			throw std::runtime_error("ERROR: Objeto não reconhecido.\n");
+		}
+
+		bodyVec[i] = body;
 	}
 
 	return bodyVec;

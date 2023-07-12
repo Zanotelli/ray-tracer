@@ -28,6 +28,10 @@
 #define COL_SOLID "solid"
 #define COL_TEXMAP "texmap"
 
+// Objetos
+#define SPHERE "sphere"
+#define POLYHEDRON "polyhedron"
+
 // Structs
 struct Color {
     int colorId;
@@ -42,14 +46,31 @@ struct Color {
 
 struct Texture {
     int textureId;
-    int textureType;
+    float ka;
+    float kd;
+    float ks;
+    float alfa;
+    float kr;
+    float kt;
+    float ior;
+};
+
+struct Sphere{
+    float pos[3];
+    float radius;
+};
+
+struct Polyhedron{
+    int n;
+    float side[20][4];
 };
 
 struct Body {
     int bodyId;
-    // dados de cor
-    // dados de posição
-    // dados de textura
+    Color color;
+    Texture texture;
+    Sphere sphere;
+    Polyhedron polyhedron;
 };
 
 // M�todos de meitura

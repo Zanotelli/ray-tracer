@@ -45,6 +45,7 @@ int main(int argc, char* argv[]) {
 		glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        drawScene(bodyVec);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
